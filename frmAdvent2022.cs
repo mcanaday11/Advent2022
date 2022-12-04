@@ -24,10 +24,13 @@ namespace Advent2022
         public List<Elf>? Elves;
         public List<Strategy>? Strategies;
         public List<Rucksack> Rucksacks;
+        public List<WorkPair> WorkPairs;
         private string result = "";
 
         private void btnProcess_Click(object sender, EventArgs e)
         {
+            txtResult.Clear();
+            result = "";
             string input = txtInput.Text;
 
             //Day 1
@@ -39,8 +42,12 @@ namespace Advent2022
             //TournamentResults();
 
             //Day 3
-            Rucksacks = GetRucksacks(input);
-            RucksackResults();
+            //Rucksacks = GetRucksacks(input);
+            //RucksackResults();
+
+            //Day 4
+            WorkPairs = GetWorkPairs(input);
+            WorkPairResults();
         }
 
         private void ReportMaxCalories() //Day 1
@@ -150,6 +157,21 @@ namespace Advent2022
             }
             return list;
         }
+        private List<WorkPair> GetWorkPairs(string input) //Day 4
+        {
+            List<WorkPair> list = new List<WorkPair>();
+            string[] lines = input.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            foreach (string line in lines)
+            {
+                string[] pairs = line.Split(",");
+                WorkPair wp = new WorkPair();
+                wp.First = pairs[0];
+                wp.Second = pairs[1];
+                wp.SetRanges();
+                list.Add(wp);
+            }
+            return list;
+        }
 
 
 
@@ -246,6 +268,20 @@ namespace Advent2022
                 totalValue += ruck.Value;
             }
             result += String.Format("Total Value: {0}\r\n", totalValue);
+            txtResult.Text = result;
+        }
+
+        private void WorkPairResults() //Day 4
+        {
+            int totalPairs = 0;
+
+            foreach (WorkPair wp in WorkPairs)
+            {
+                result += String.Format("First: {0} Second: {1} Full Overlap?: {2} Any Overlap? {3}\r\n", wp.First, wp.Second, wp.FullOverlap, wp.AnyOverlap);
+                //if (wp.FullOverlap) { totalPairs++; }
+                if (wp.AnyOverlap) { totalPairs++; }
+            }
+            result += String.Format("Total Pairs: {0}\r\n", totalPairs);
             txtResult.Text = result;
         }
 
@@ -380,6 +416,51 @@ namespace Advent2022
         {
             public char theChar { get; set; }
             public int theValue { get; set; }
+        }
+
+    }
+
+    public class WorkPair //Day 4
+    {
+        public string? First { get; set; }
+        public string? Second { get; set; }
+
+        public IEnumerable<int>? FirstRange { get; set; }
+        public IEnumerable<int>? SecondRange { get; set; }
+        public bool FullOverlap { 
+            get
+            {
+                bool FirstWithinSecond = FirstRange.Min() >= SecondRange.Min() && FirstRange.Max() <= SecondRange.Max();
+                bool SecondWithinFirst = SecondRange.Min() >= FirstRange.Min() && SecondRange.Max() <= FirstRange.Max();
+                return (FirstWithinSecond || SecondWithinFirst);
+            } 
+        }
+        public bool AnyOverlap
+        {
+            get
+            {
+                return FirstRange.Intersect(SecondRange).Count() > 0;
+            }
+        }
+
+
+        public void SetRanges()
+        {
+            int min, max;
+            string[] firstRange = First.Split("-");
+            min = int.Parse(firstRange[0]);
+            max = int.Parse(firstRange[1]);
+            FirstRange = getRange(min, max);
+
+            string[] secondRange = Second.Split("-");
+            min = int.Parse(secondRange[0]);
+            max = int.Parse(secondRange[1]);
+            SecondRange = getRange(min, max);
+        }
+
+        private IEnumerable<int> getRange(int min, int max)
+        {
+            return Enumerable.Range(min, max - min + 1);
         }
 
     }

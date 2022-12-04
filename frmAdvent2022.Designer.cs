@@ -40,6 +40,7 @@
             this.txtInput.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtInput.Multiline = true;
             this.txtInput.Name = "txtInput";
+            this.txtInput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtInput.Size = new System.Drawing.Size(903, 193);
             this.txtInput.TabIndex = 0;
             // 

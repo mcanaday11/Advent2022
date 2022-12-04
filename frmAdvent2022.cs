@@ -23,8 +23,10 @@ namespace Advent2022
 
         public List<Elf>? Elves;
         public List<Strategy>? Strategies;
-        public List<Rucksack> Rucksacks;
-        public List<WorkPair> WorkPairs;
+        public List<Rucksack>? Rucksacks;
+        public List<WorkPair>? WorkPairs;
+        public List<THING>? Things;
+
         private string result = "";
 
         private void btnProcess_Click(object sender, EventArgs e)
@@ -47,7 +49,14 @@ namespace Advent2022
 
             //Day 4
             WorkPairs = GetWorkPairs(input);
-            WorkPairResults();
+            txtResult.Text = WorkPairResults();
+
+
+
+            //TEMPLATE
+            //Day X
+            //Things = GetThings(input);
+            //ThingResults();
         }
 
         private void ReportMaxCalories() //Day 1
@@ -174,6 +183,24 @@ namespace Advent2022
         }
 
 
+        //TEMPLATE
+        private List<THING> GetThings(string input) //Day X
+        {
+            List<THING> list = new List<THING>();
+            string[] lines = input.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            foreach (string line in lines)
+            {
+                string[] pairs = line.Split(",");
+                THING x = new THING();
+                x.a = pairs[0];
+                x.b = pairs[1];
+                list.Add(x);
+            }
+            return list;
+        }
+
+
+
 
         private RPS Action(char input) //Day 2
         {
@@ -271,7 +298,7 @@ namespace Advent2022
             txtResult.Text = result;
         }
 
-        private void WorkPairResults() //Day 4
+        private string WorkPairResults() //Day 4
         {
             int totalPairs = 0;
 
@@ -282,187 +309,29 @@ namespace Advent2022
                 if (wp.AnyOverlap) { totalPairs++; }
             }
             result += String.Format("Total Pairs: {0}\r\n", totalPairs);
+            return result;
+        }
+
+        //TEMPLATE
+        private void ThingResults() //Day X
+        {
+            int total = 0;
+
+            foreach (THING x in Things)
+            {
+                result += String.Format("First: {0} Second: {1}\r\n", x.a, x.b);
+                total++;
+            }
+            result += String.Format("Total Pairs: {0}\r\n", total);
             txtResult.Text = result;
         }
-
     }
 
-    public enum RPS //Day 2
+    //TEMPLATE
+    public class THING
     {
-        None = 0,
-        Rock = 1,
-        Paper = 2,
-        Scissors = 3
-    }
-
-    public enum WLD //Day 2
-    {
-        Win = 6,
-        Loss = 0,
-        Draw = 3
-    }
-
-    public class Strategy //Day 2
-    {
-        public RPS Opponent { get; set; }  
-        public RPS Response { get; set; }  
-
-        public WLD RequiredResult { get; set; } 
-        public WLD Result
-        {
-            get
-            {
-                return GetResult();
-            }
-        }
-
-        public int Score
-        {
-            get { return CalcScore(); }
-        }
-
-        private WLD GetResult()
-        {
-            if (Opponent == RPS.Rock)
-            {
-                switch (Response)
-                {
-                    case RPS.Rock:
-                        return WLD.Draw;
-                    case RPS.Paper:
-                        return WLD.Win;
-                    case RPS.Scissors:
-                        return WLD.Loss;
-                }
-            }
-            if (Opponent == RPS.Paper)
-            {
-                switch (Response)
-                {
-                    case RPS.Rock:
-                        return WLD.Loss;
-                    case RPS.Paper:
-                        return WLD.Draw;
-                    case RPS.Scissors:
-                        return WLD.Win;
-                }
-            }
-            if (Opponent == RPS.Scissors)
-            {
-                switch (Response)
-                {
-                    case RPS.Rock:
-                        return WLD.Win;
-                    case RPS.Paper:
-                        return WLD.Loss;
-                    case RPS.Scissors:
-                        return WLD.Draw;
-                }
-            }
-            return WLD.Loss; //Won't happen
-        }
-
-        private int CalcScore()
-        {
-            return (int)Result + (int)Response;
-        }
-    }
-
-    public class Elf //Day 1
-    {
-        public int ElfNumber { get; set; }
-        public int Calories { get; set; }
-    }
-
-    public class Rucksack //Day 3
-    {
-        public string? First { get; set; }
-        public string? Second { get; set; }
-        public string? Third { get; set; }
-        public char Match
-        {
-            get
-            {
-                var matches = First.Intersect(Second);
-                matches= matches.Intersect(Third);
-                return matches.FirstOrDefault();
-            }
-        }
-        public int Value { 
-            get
-            {
-                List<alphaValues> valueList = GetValueList();
-                return valueList.Find(x => x.theChar == Match).theValue;
-            }
-        }
-        private List<alphaValues> GetValueList()
-        {
-            string alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            List<alphaValues> values = new List<alphaValues>();
-            int value = 1;
-            foreach (char c in alphabet)
-            {
-                alphaValues av = new alphaValues
-                {
-                    theChar = c,
-                    theValue = value++
-                };
-                values.Add(av);
-            }
-            return values;  
-        }
-
-        public class alphaValues
-        {
-            public char theChar { get; set; }
-            public int theValue { get; set; }
-        }
-
-    }
-
-    public class WorkPair //Day 4
-    {
-        public string? First { get; set; }
-        public string? Second { get; set; }
-
-        public IEnumerable<int>? FirstRange { get; set; }
-        public IEnumerable<int>? SecondRange { get; set; }
-        public bool FullOverlap { 
-            get
-            {
-                bool FirstWithinSecond = FirstRange.Min() >= SecondRange.Min() && FirstRange.Max() <= SecondRange.Max();
-                bool SecondWithinFirst = SecondRange.Min() >= FirstRange.Min() && SecondRange.Max() <= FirstRange.Max();
-                return (FirstWithinSecond || SecondWithinFirst);
-            } 
-        }
-        public bool AnyOverlap
-        {
-            get
-            {
-                return FirstRange.Intersect(SecondRange).Count() > 0;
-            }
-        }
-
-
-        public void SetRanges()
-        {
-            int min, max;
-            string[] firstRange = First.Split("-");
-            min = int.Parse(firstRange[0]);
-            max = int.Parse(firstRange[1]);
-            FirstRange = getRange(min, max);
-
-            string[] secondRange = Second.Split("-");
-            min = int.Parse(secondRange[0]);
-            max = int.Parse(secondRange[1]);
-            SecondRange = getRange(min, max);
-        }
-
-        private IEnumerable<int> getRange(int min, int max)
-        {
-            return Enumerable.Range(min, max - min + 1);
-        }
-
+        public string a { get; set; }
+        public string b { get; set; }
     }
 
 }

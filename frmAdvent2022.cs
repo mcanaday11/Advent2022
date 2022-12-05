@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -27,6 +28,9 @@ namespace Advent2022
         public List<WorkPair>? WorkPairs;
         public List<THING>? Things;
 
+        public Stack<char>[] Stacks = new Stack<char>[10];
+        public List<Command> Commands;
+
         private string result = "";
 
         private void btnProcess_Click(object sender, EventArgs e)
@@ -48,9 +52,15 @@ namespace Advent2022
             //RucksackResults();
 
             //Day 4
-            WorkPairs = GetWorkPairs(input);
-            txtResult.Text = WorkPairResults();
+            //WorkPairs = GetWorkPairs(input);
+            //txtResult.Text = WorkPairResults();
 
+            //Day 5
+            BuildStack();
+            Commands = GetCommands(input);
+            txtResult.Text = CommandResults();
+
+            //Day 6
 
 
             //TEMPLATE
@@ -182,6 +192,113 @@ namespace Advent2022
             return list;
         }
 
+        //This sucks, I know.  got lazy and should have just used a fixed input to get the data into columns then put into the Stacks.
+        private void BuildStack() //Day 5
+        {
+            //[P]     [C]         [M]            
+            //[D]     [P] [B]     [V] [S]        
+            //[Q] [V] [R] [V]     [G] [B]        
+            //[R] [W] [G] [J]     [T] [M]     [V]
+            //[V] [Q] [Q] [F] [C] [N] [V]     [W]
+            //[B] [Z] [Z] [H] [L] [P] [L] [J] [N]
+            //[H] [D] [L] [D] [W] [R] [R] [P] [C]
+            //[F] [L] [H] [R] [Z] [J] [J] [D] [D]
+            // 1   2   3   4   5   6   7   8   9 
+
+            Stacks[1] = new Stack<char>();
+            Stacks[1].Push('F');
+            Stacks[1].Push('H');
+            Stacks[1].Push('B');
+            Stacks[1].Push('V');
+            Stacks[1].Push('R');
+            Stacks[1].Push('Q');
+            Stacks[1].Push('D');
+            Stacks[1].Push('P');
+
+            Stacks[2] = new Stack<char>();
+            Stacks[2].Push('L');
+            Stacks[2].Push('D');
+            Stacks[2].Push('Z');
+            Stacks[2].Push('Q');
+            Stacks[2].Push('W');
+            Stacks[2].Push('V');
+
+            Stacks[3] = new Stack<char>();
+            Stacks[3].Push('H');
+            Stacks[3].Push('L');
+            Stacks[3].Push('Z');
+            Stacks[3].Push('Q');
+            Stacks[3].Push('G');
+            Stacks[3].Push('R');
+            Stacks[3].Push('P');
+            Stacks[3].Push('C');
+
+            Stacks[4] = new Stack<char>();
+            Stacks[4].Push('R');
+            Stacks[4].Push('D');
+            Stacks[4].Push('H');
+            Stacks[4].Push('F');
+            Stacks[4].Push('J');
+            Stacks[4].Push('V');
+            Stacks[4].Push('B');
+
+            Stacks[5] = new Stack<char>();
+            Stacks[5].Push('Z');
+            Stacks[5].Push('W');
+            Stacks[5].Push('L');
+            Stacks[5].Push('C');
+
+            Stacks[6] = new Stack<char>();
+            Stacks[6].Push('J');
+            Stacks[6].Push('R');
+            Stacks[6].Push('P');
+            Stacks[6].Push('N');
+            Stacks[6].Push('T');
+            Stacks[6].Push('G');
+            Stacks[6].Push('V');
+            Stacks[6].Push('M');
+
+            Stacks[7] = new Stack<char>();
+            Stacks[7].Push('J');
+            Stacks[7].Push('R');
+            Stacks[7].Push('L');
+            Stacks[7].Push('V');
+            Stacks[7].Push('M');
+            Stacks[7].Push('B');
+            Stacks[7].Push('S');
+
+            Stacks[8] = new Stack<char>();
+            Stacks[8].Push('D');
+            Stacks[8].Push('P');
+            Stacks[8].Push('J');
+
+            Stacks[9] = new Stack<char>();
+            Stacks[9].Push('D');
+            Stacks[9].Push('C');
+            Stacks[9].Push('N');
+            Stacks[9].Push('W');
+            Stacks[9].Push('V');
+        }
+
+
+        private List<Command> GetCommands(string input) //Day 5
+        {
+            List<Command> list = new List<Command>();
+            string[] lines = input.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            foreach (string line in lines)
+            {
+                string[] stuff = line.Split(" ");
+                Command cmd = new Command();
+                cmd.Count = int.Parse(stuff[1]);
+                cmd.FromColumn = int.Parse(stuff[3]);
+                cmd.ToColumn = int.Parse(stuff[5]);
+                list.Add(cmd);
+            }
+            return list;
+        }
+
+
+
 
         //TEMPLATE
         private List<THING> GetThings(string input) //Day X
@@ -312,8 +429,38 @@ namespace Advent2022
             return result;
         }
 
+        private string CommandResults() //Day 5
+        {
+            foreach (Command cmd in Commands)
+            {
+                result += String.Format("Count: {0} From: {1} To: {2}\r\n", cmd.Count, cmd.FromColumn, cmd.ToColumn);
+                DoCommands(cmd);
+            }
+            for (int i = 1; i<10;i++)
+            {
+                result += String.Format("Top Crate: {0}\r\n", Stacks[i].Peek());
+            }
+            return result;
+        }
+        private void DoCommands(Command cmd) //Day 5
+        {
+            List<char> keepOrder = new List<char>();
+
+            for (int i = 1; i<=cmd.Count; i++)
+            {
+                char item = Stacks[cmd.FromColumn].Pop();
+                keepOrder.Add(item);
+            }
+            keepOrder.Reverse(); //Flip the order
+            foreach (char item in keepOrder)
+            {
+                Stacks[cmd.ToColumn].Push(item);
+            }
+        }
+
+
         //TEMPLATE
-        private void ThingResults() //Day X
+        private string ThingResults() //Day X
         {
             int total = 0;
 
@@ -323,7 +470,7 @@ namespace Advent2022
                 total++;
             }
             result += String.Format("Total Pairs: {0}\r\n", total);
-            txtResult.Text = result;
+            return result;
         }
     }
 

@@ -56,12 +56,12 @@ namespace Advent2022
             //txtResult.Text = WorkPairResults();
 
             //Day 5
-            BuildStack();
-            Commands = GetCommands(input);
-            txtResult.Text = CommandResults();
+            //BuildStack();
+            //Commands = GetCommands(input);
+            //txtResult.Text = CommandResults();
 
             //Day 6
-
+            txtResult.Text = GetSequenceStart(input);
 
             //TEMPLATE
             //Day X
@@ -297,6 +297,26 @@ namespace Advent2022
             return list;
         }
 
+        private string GetSequenceStart(string input) //Day 6
+        {
+            Queue<char> sequence = new Queue<char>();
+            int answer = 1;
+            foreach (char c in input)
+            {
+                sequence.Enqueue(c); //Add to top of the queue
+                if (sequence.Count > 14)
+                {
+                    sequence.Dequeue(); //Remove from bottom of the queue
+                }
+                if (sequence.Distinct().Count() == 14) //Have 14 unique in queue.  Next is the start of sequence.
+                {
+                    result += String.Format("Start position: {0}\r\n", answer);
+                    break;
+                }
+                answer++;
+            }
+            return result;
+        }
 
 
 

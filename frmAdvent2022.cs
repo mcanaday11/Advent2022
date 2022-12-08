@@ -61,7 +61,19 @@ namespace Advent2022
             //txtResult.Text = CommandResults();
 
             //Day 6
-            txtResult.Text = GetSequenceStart(input);
+            //txtResult.Text = GetSequenceStart(input);
+
+            //Day 7
+            //var adventDay7 = new Day7();
+            //adventDay7.GetDirectoryInfo(input);
+            //txtResult.Text = adventDay7.DirectoryResults();
+
+            //Day 8
+            var adventDay8 = new Day8();
+            adventDay8.GetForestInput(input);
+            txtResult.Text = adventDay8.ReportForestResults();
+
+
 
             //TEMPLATE
             //Day X

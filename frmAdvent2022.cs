@@ -69,10 +69,19 @@ namespace Advent2022
             //txtResult.Text = adventDay7.DirectoryResults();
 
             //Day 8
-            var adventDay8 = new Day8();
-            adventDay8.GetForestInput(input);
-            txtResult.Text = adventDay8.ReportForestResults();
+            //var adventDay8 = new Day8();
+            //adventDay8.GetForestInput(input);
+            //txtResult.Text = adventDay8.ReportForestResults();
 
+            //Day 9
+            var adventDay9 = new Day9();
+            adventDay9.GetPathInput(input);
+            txtResult.Text = adventDay9.MoveResults();
+
+            //Day 10
+            //var adventDay10 = new Day10();
+            //adventDay10.GetSignalInput(input);
+            //txtResult.Text = adventDay10.SignalResults();
 
 
             //TEMPLATE

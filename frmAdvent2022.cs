@@ -26,8 +26,7 @@ namespace Advent2022
         public List<Strategy>? Strategies;
         public List<Rucksack>? Rucksacks;
         public List<WorkPair>? WorkPairs;
-        public List<THING>? Things;
-
+        
         public Stack<char>[] Stacks = new Stack<char>[10];
         public List<Command> Commands;
 
@@ -74,20 +73,24 @@ namespace Advent2022
             //txtResult.Text = adventDay8.ReportForestResults();
 
             //Day 9
-            var adventDay9 = new Day9();
-            adventDay9.GetPathInput(input);
-            txtResult.Text = adventDay9.MoveResults();
+            //var adventDay9 = new Day9();
+            //adventDay9.GetPathInput(input);
+            //txtResult.Text = adventDay9.MoveResults();
 
             //Day 10
             //var adventDay10 = new Day10();
             //adventDay10.GetSignalInput(input);
             //txtResult.Text = adventDay10.SignalResults();
 
+            //Day 11
+            var adventDay11 = new Day11();
+            adventDay11.GetMonkeyInput(input);
+            txtResult.Text = adventDay11.MonkeyResults();
 
-            //TEMPLATE
-            //Day X
-            //Things = GetThings(input);
-            //ThingResults();
+            //Day XX
+            //var adventDayXX = new DayXX();
+            //adventDayXX.GetThingInput(input);
+            //txtResult.Text = adventDayXX.ThingResults();
         }
 
         private void ReportMaxCalories() //Day 1
@@ -339,27 +342,6 @@ namespace Advent2022
             return result;
         }
 
-
-
-        //TEMPLATE
-        private List<THING> GetThings(string input) //Day X
-        {
-            List<THING> list = new List<THING>();
-            string[] lines = input.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-            foreach (string line in lines)
-            {
-                string[] pairs = line.Split(",");
-                THING x = new THING();
-                x.a = pairs[0];
-                x.b = pairs[1];
-                list.Add(x);
-            }
-            return list;
-        }
-
-
-
-
         private RPS Action(char input) //Day 2
         {
             if (input == 'A')
@@ -499,27 +481,5 @@ namespace Advent2022
             }
         }
 
-
-        //TEMPLATE
-        private string ThingResults() //Day X
-        {
-            int total = 0;
-
-            foreach (THING x in Things)
-            {
-                result += String.Format("First: {0} Second: {1}\r\n", x.a, x.b);
-                total++;
-            }
-            result += String.Format("Total Pairs: {0}\r\n", total);
-            return result;
-        }
     }
-
-    //TEMPLATE
-    public class THING
-    {
-        public string a { get; set; }
-        public string b { get; set; }
-    }
-
 }

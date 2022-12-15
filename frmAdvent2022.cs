@@ -93,10 +93,14 @@ namespace Advent2022
             //txtResult.Text = adventDay12.MapResults();
 
             //Day 13
-            var adventDay13 = new Day13();
-            adventDay13.GetPacketInput(input);
-            txtResult.Text = adventDay13.PacketResults(input);
+            //var adventDay13 = new Day13();
+            //adventDay13.GetPacketInput(input);
+            //txtResult.Text = adventDay13.PacketResults(input);
 
+            //Day 14
+            var adventDay14 = new Day14();
+            adventDay14.GetCaveInput(input);
+            txtResult.Text = adventDay14.SandResults();
 
             //Day XX
             //var adventDayXX = new DayXX();

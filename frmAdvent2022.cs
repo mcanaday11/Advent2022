@@ -108,10 +108,14 @@ namespace Advent2022
             //txtResult.Text = adventDay15.SensorResults();
 
             //Day 16
-            var adventDay16 = new Day16();
-            adventDay16.GetScanInput(input);
-            txtResult.Text = adventDay16.ScanResults();
+            //var adventDay16 = new Day16();
+            //adventDay16.GetScanInput(input);
+            //txtResult.Text = adventDay16.ScanResults();
 
+            //Day 19
+            var adventDay19 = new Day19();
+            adventDay19.GetInput(input);
+            txtResult.Text = adventDay19.ShowResults();
 
             //Day XX
             //var adventDayXX = new DayXX();
